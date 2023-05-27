@@ -1,0 +1,93 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px">
+            <a class="btn btn-success" href="/app02/user/add/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                新建用户</a>
+            <a class="btn btn-success" href="/app02/user/model_add/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                新建用户(model)</a>
+        </div>
+
+
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                用户列表
+            </div>
+
+            <div class="panel-body">
+                <p>地狱火扣1即送</p>
+            </div>
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>姓名</th>
+                    <th>密码</th>
+                    <th>年龄</th>
+                    <th>余额</th>
+                    <th>入职时间</th>
+                    <th>所属部门</th>
+                    <th>性别</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in data_list %}
+                    <tr>
+                        <th scope="row">{{ obj.id }}</th>
+                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.password }}</td>
+                        <td>{{ obj.age }}</td>
+                        <td>{{ obj.account }}</td>
+                        <td>{{ obj.create_time|date:'y-m-d' }}</td>
+                        <td>{{ obj.depart.title }}</td>
+                        <td>{{ obj.get_gender_display }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="/app02/user/{{ obj.id }}/edit/">编辑</a>
+                            <a class="btn btn-danger btn-xs" href="/app02/user/{{ obj.id }}/delete/">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--页面跳转-->
+    <div class="container">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li>
+                    <a href="?q={{ search_data }}&page=1" aria-label="Previous">
+                        <span aria-hidden="true">首页</span>
+                    </a>
+                </li>
+                <!--
+                后端生成HTML文档
+                哈哈，前端的事后端做
+                -->
+                {{ page_string }}
+
+                <li>
+                    <form method="GET" action="" style="float: left;margin-left: 10px">
+                        <div class="input-group" style="width: 120px">
+                            <input type="text" name="page" class="form-control" placeholder="跳转" value="{{ page }}">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                            </button>
+                        </span>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </div>
+{% endblock %}
