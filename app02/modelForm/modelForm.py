@@ -79,3 +79,11 @@ class Admin_form(Bootstrap_model_form):
             raise ValidationError('两次密码输入不一致喵~')
 
         return confirm
+
+class TaskModelForm(Bootstrap_model_form):
+    class Meta:
+        model = Task
+        fields = '__all__'
+        widgets = {
+            'detail': forms.TextInput
+        }

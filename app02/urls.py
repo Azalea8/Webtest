@@ -31,5 +31,7 @@ urlpatterns = [
     path('prettynum/<int:nid>/delete/', pretty_num.pretty_delete),
     path('prettynum/<int:nid>/edit/', pretty_num.pretty_edit),
 
+    # 任务管理
     path('task/list/', task.task_list),
+    path('task/ajax/', task.task_ajax),
 ]

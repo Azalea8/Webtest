@@ -41,6 +41,9 @@ class InfoUser(models.Model):
     )
     gender = models.SmallIntegerField(verbose_name='性别', choices=gender_choices)
 
+    def __str__(self):
+        return self.name
+
 class PrettyNum(models.Model):
     mobile = models.CharField(verbose_name='手机号', max_length=11, unique=True)
     price = models.IntegerField(verbose_name='价格', default=0)
@@ -58,3 +61,16 @@ class PrettyNum(models.Model):
         (0, '已占用')
     )
     status = models.SmallIntegerField(verbose_name='状态', choices=status_choice, default=1)
+
+class Task(models.Model):
+    title = models.CharField(verbose_name='标题', max_length=64)
+    detail = models.TextField(verbose_name='任务详细')
+
+    level_choices = {
+        (1, '紧急'),
+        (2, '重要'),
+        (3, '临时'),
+    }
+    level = models.SmallIntegerField(verbose_name='级别', choices=level_choices, default=1)
+
+    user = models.ForeignKey(verbose_name='负责人', to='InfoUser', to_field='id', on_delete=models.CASCADE)
