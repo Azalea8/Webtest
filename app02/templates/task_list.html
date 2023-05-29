@@ -2,26 +2,52 @@
 
 {% block content %}
     <div class="container">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+            添加任务
+        </button>
+
         <div class="panel panel-default">
-            <div class="panel-heading">表单</div>
-            <div class="panel-body">
-                <form id="AddForm" novalidate>
-
-                    {% for form in formset %}
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label>{{ form.label }}</label>
-                                {{ form }}
-                                <span class="error-msg" style="color: red"></span>
-                                <!--<input type="text" class="form-control" placeholder="姓名" name="name">-->
-                            </div>
-                        </div>
-                    {% endfor %}
-
-                    <button id="btnAdd" type="button" class="btn btn-primary">提 交</button>
-                </form>
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                管理员用户列表
             </div>
+
+            <div class="panel-body">
+                <p>地狱火扣1即送</p>
+            </div>
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>标题</th>
+                    <th>级别</th>
+                    <th>负责人</th>
+                    <th>详情</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in data_list %}
+                    <tr>
+                        <th scope="row">{{ obj.id }}</th>
+                        <td>{{ obj.title }}</td>
+                        <td>{{ obj.get_level_display }}</td>
+                        <td>{{ obj.user.name }}</td>
+                        <td>{{ obj.detail }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="/app02/task/{{ obj.id }}/edit/">编辑</a>
+                            <a class="btn btn-danger btn-xs" href="/app02/task/{{ obj.id }}/delete/">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
+        <div style="height: 1000px"></div>
         <hr/>
         <h1>Ajax学习</h1>
 
@@ -40,6 +66,45 @@
             <input name="Email" type="text" placeholder="输入邮箱">
             <input id="btn3" type="button" class="btn btn-primary" value="提 交"/>
         </form>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">添加任务</div>
+                        <div class="panel-body">
+                            <form id="AddForm" novalidate>
+
+                                {% for form in formset %}
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label>{{ form.label }}</label>
+                                            {{ form }}
+                                            <span class="error-msg" style="color: red"></span>
+                                            <!--<input type="text" class="form-control" placeholder="姓名" name="name">-->
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关 闭</button>
+                    <button id="btnAdd" type="button" class="btn btn-primary">提 交</button>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
@@ -116,11 +181,12 @@
                     data: $('#AddForm').serialize(),
                     dataType: 'json',
                     success: function (res) {
-                        if(res.status){
+                        if (res.status) {
                             alert('添加成功！');
-                        }else {
-                            $.each(res.errors, function (name, data){
-                                $('#id_' + name).next().text(data[0])
+                            location.reload();
+                        } else {
+                            $.each(res.errors, function (name, data) {
+                                $('#id_' + name).next().text(data[0]);
                             })
                         }
                     }
