@@ -9,15 +9,21 @@ from django import forms
 # Create your views here.
 
 def task_list(request):
+    data_list = Task.objects.all().order_by('-id')
     formset = TaskModelForm()
-    return render(request, 'task_list.html', {'formset': formset})
+    context = {
+        'data_list': data_list,
+        'formset': formset
+    }
+    return render(request, 'task_list.html', context)
 
 @csrf_exempt # 免除csrf_tokens检测
 def task_ajax(request):
+
     formset = TaskModelForm(data=request.POST)
     if formset.is_valid():
         formset.save()
-        data_dict = {'status': True,}
+        data_dict = {'status': True, }
         return HttpResponse(json.dumps(data_dict))
     else:
         data_dict = {'status': False, 'errors': formset.errors}
