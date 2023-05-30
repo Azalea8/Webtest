@@ -74,3 +74,16 @@ class Task(models.Model):
     level = models.SmallIntegerField(verbose_name='级别', choices=level_choices, default=1)
 
     user = models.ForeignKey(verbose_name='负责人', to='InfoUser', to_field='id', on_delete=models.CASCADE)
+
+class Order(models.Model):
+    oid = models.CharField(verbose_name='订单编号', max_length=64)
+    title = models.CharField(verbose_name='名称', max_length=32)
+    price = models.IntegerField(verbose_name='价格')
+
+    status_choices = {
+        (1, '已支付'),
+        (0, '未支付'),
+    }
+    status = models.SmallIntegerField(verbose_name='状态', choices=status_choices, default=0)
+
+    admin = models.ForeignKey(verbose_name='管理员', to='Admin', to_field='id', on_delete=models.CASCADE)

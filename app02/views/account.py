@@ -16,7 +16,6 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(attrs={'placeholder': '这里输入密码喵', 'class': 'form-control'})
 
     )
-
     def clean_password(self):
         pwd = self.cleaned_data.get('password')
         return md5(pwd)

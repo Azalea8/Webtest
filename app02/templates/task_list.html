@@ -82,20 +82,21 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">添加任务</div>
                         <div class="panel-body">
+
                             <form id="AddForm" novalidate>
-
-                                {% for form in formset %}
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label>{{ form.label }}</label>
-                                            {{ form }}
-                                            <span class="error-msg" style="color: red"></span>
-                                            <!--<input type="text" class="form-control" placeholder="姓名" name="name">-->
+                                <div class="clearfix">
+                                    {% for form in formset %}
+                                        <div class="col-xs-6">
+                                            <div class="form-group" style="position: relative;margin-top: 20px">
+                                                <label>{{ form.label }}</label>
+                                                {{ form }}
+                                                <span class="error-msg" style="color: red;position: absolute"></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                {% endfor %}
-
+                                    {% endfor %}
+                                </div>
                             </form>
+
                         </div>
                     </div>
                 </div>

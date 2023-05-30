@@ -26,21 +26,27 @@
     </style>
 </head>
 <body>
-    <div class="account">
-        <h2>用户登录</h2>
-        <form method="post" action="" novalidate>
-            {% csrf_token %}
+<div class="account">
+    <h2>用户登录</h2>
+    <form method="post" action="" novalidate>
+        {% csrf_token %}
 
-            {% for form in formset %}
+        {% for form in formset %}
             <div class="form-group">
                 <label>{{ form.label }}</label>
                 {{ form }}
                 <span style="color: red">{{ form.errors.0 }}</span>
             </div>
-            {% endfor %}
-
-            <input type="submit" value="登 录" class="btn btn-primary">
-        </form>
-    </div>
+        {% endfor %}
+        <input type="button" value="测试" class="btn btn-primary" id="change">
+        <input type="submit" value="登 录" class="btn btn-primary">
+    </form>
+</div>
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script type="text/javascript">
+    $('#change').click(function () {
+        alert('测试');
+    })
+</script>
 </body>
 </html>

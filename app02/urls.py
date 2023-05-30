@@ -1,5 +1,5 @@
 from django.urls import path
-from app02.views import depart, user, pretty_num, admin, account, task
+from app02.views import depart, user, pretty_num, admin, account, task, order
 
 urlpatterns = [
 
@@ -34,4 +34,9 @@ urlpatterns = [
     # 任务管理
     path('task/list/', task.task_list),
     path('task/ajax/', task.task_ajax),
+
+    # 订单管理
+    path('order/list/', order.order_list),
+    path('order/add/', order.order_add),
+    path('order/delete/', order.order_delete),
 ]

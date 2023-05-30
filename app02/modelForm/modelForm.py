@@ -87,3 +87,12 @@ class TaskModelForm(Bootstrap_model_form):
         widgets = {
             'detail': forms.TextInput
         }
+
+class OrderModelForm(Bootstrap_model_form):
+    class Meta:
+        model = Order
+        fields = '__all__'
+        exclude = ['oid', 'admin'] # 去除一些不需要前端提交的数据项
+        widgets = {
+
+        }

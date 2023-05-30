@@ -1,0 +1,151 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div>
+            <input type="button" value="新建订单" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        </div>
+
+        <div class="panel panel-default" style="margin-top: 20px">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                订单列表
+            </div>
+
+            <div class="panel-body">
+                <p>地狱火扣1即送</p>
+            </div>
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>订单编号</th>
+                    <th>名称</th>
+                    <th>价格</th>
+                    <th>状态</th>
+                    <th>管理员</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in data_list %}
+                    <tr>
+                        <th scope="row">{{ obj.id }}</th>
+                        <td>{{ obj.oid }}</td>
+                        <td>{{ obj.title }}</td>
+                        <td>{{ obj.price }}</td>
+                        <td>{{ obj.get_status_display }}</td>
+                        <td>{{ obj.admin.username }}</td>
+                        <td>
+                            <!--<a class="btn btn-primary btn-xs" href="/app02/order/{{ obj.id }}/edit/">编辑</a>-->
+                            <input type="button" class="btn btn-primary btn-xs" value="编辑">
+                            <input nid="{{ obj.id }}" type="button" class="btn btn-danger btn-xs btn-delete" value="删除">
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">新建订单</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="AddForm" novalidate>
+                        <div class="clearfix">
+                            {% for form in formset %}
+                                <div class="col-xs-6">
+                                    <div class="form-group" style="position: relative;margin-top: 20px">
+                                        <label>{{ form.label }}</label>
+                                        {{ form }}
+                                        <span class="error-msg" style="color: red;position: absolute"></span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="btnSave" type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <h4 style="text-align: center">警告</h4>
+                <p>删除后无法恢复，谨慎删除</p>
+                <p style="margin-top: 10px;text-align: right">
+                    <button id="btnDelete" type="button" class="btn btn-danger">确定</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        let nid
+
+        $('#btnSave').click(function () {
+            $('.error-msg').empty()
+
+            $.ajax({
+                url: '/app02/order/add/',
+                type: 'post',
+                data: $('#AddForm').serialize(),
+                dataType: 'json',
+                success: function (res) {
+                    if (res.status) {
+                        alert('添加成功！');
+                        $('#AddForm')[0].reset(); //$('#AddForm')是jQuery对象， $('#AddForm')[0]是DOM对象
+                        $('#myModal').modal('hide');
+                        location.reload(); // 刷新页面
+                    } else {
+                        $.each(res.errors, function (name, data) {
+                            $('#id_' + name).next().text(data[0]);
+                        })
+                    }
+                }
+            })
+        })
+
+        // 获取用户点击的数据的ID
+        $('.btn-delete').click(function (){
+            $('#DeleteModal').modal('show');
+
+            nid = $(this).attr('nid')
+            console.log(nid)
+        })
+
+        $('#btnDelete').click(function () {
+            $.ajax({
+                url: '/app02/order/delete/',
+                type: 'get',
+                data: {'nid': nid},
+                dataType: 'json',
+                success: function (res) {
+                    if (res.status) {
+                        alert('删除成功！');
+                        $('#DeleteModal').modal('hide');
+                        location.reload(); // 刷新页面
+                    }
+                }
+            })
+        })
+    </script>
+{% endblock %}
